@@ -18,7 +18,7 @@
   layer.setAttribute('aria-hidden', 'true');
   for (const name of ['first', 'second']) {
     const fish = document.createElement('img');
-    fish.src = 'goldfish.png'; fish.alt = ''; fish.className = 'desktop-fish ' + name;
+    fish.src = 'goldfish.webp'; fish.alt = ''; fish.className = 'desktop-fish ' + name;
     layer.append(fish);
   }
   for (let i = 0; i < 7; i++) {

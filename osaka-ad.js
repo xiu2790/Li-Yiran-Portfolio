@@ -6,7 +6,7 @@
   const win=document.createElement('section');win.id='osakaAd';win.className='window osaka-ad';win.hidden=true;win.innerHTML='<div class="bar">大阪丸 / TINY KOMARU JAPANESE</div><button class="close" aria-label="关闭大阪丸广告">×</button><div class="osaka-poster"><img src="osaka-poster.png" alt="大阪丸广告海报"><div class="osaka-stars"><span class="osaka-star">✧</span><span class="osaka-star">✧</span><span class="osaka-star">✧</span><span class="osaka-star">✧</span><span class="osaka-star">✧</span><span class="osaka-star">✧</span></div><div class="osaka-hit osaka-cta"></div><div class="osaka-hit osaka-recommend"></div><div class="osaka-hit osaka-cup"></div><div class="osaka-hit osaka-fan"></div></div>';document.body.appendChild(win);
   let z=260,drag=null;const bar=win.querySelector('.bar');bar.onpointerdown=e=>{e.preventDefault();win.style.zIndex=++z;const r=win.getBoundingClientRect();drag={x:e.clientX-r.left,y:e.clientY-r.top};bar.setPointerCapture(e.pointerId)};bar.onpointermove=e=>{if(!drag)return;win.style.left=Math.max(4,Math.min(innerWidth-win.offsetWidth-4,e.clientX-drag.x))+'px';win.style.top=Math.max(4,Math.min(innerHeight-win.offsetHeight-38,e.clientY-drag.y))+'px';win.style.transform='none'};bar.onpointerup=bar.onpointercancel=()=>{drag=null;parent.postMessage({type:'roam-focus'},'*')};win.querySelector('.close').onclick=()=>win.hidden=true;addEventListener('message',e=>{if(e.data?.type==='osaka-open'){win.hidden=false;win.style.zIndex=++z}if(e.data?.type==='osaka-close')win.hidden=true});
   const sound=new Audio('osaka-sound.mp4');
-  sound.preload='auto';sound.volume=.7;
+  sound.preload='none';sound.volume=.7;
   addEventListener('message',e=>{if(e.source===parent&&e.data?.type==='osaka-open'){sound.currentTime=0;sound.play().catch(()=>{});}});
   const poster=win.querySelector('.osaka-poster');
   const original=poster.querySelector('img');
@@ -68,18 +68,18 @@
   gallery.innerHTML='<div class="osaka-gallery-title">大阪丸 / DESIGN GALLERY</div><button class="close" aria-label="关闭作品展示">×</button><div class="osaka-gallery-view" tabindex="0" aria-label="横向图片展示"><div class="osaka-gallery-track"></div></div><div class="osaka-gallery-status">鼠标左右移动控制方向与速度 · 中央暂停 · Esc 返回</div>';
   document.body.append(gallery);
   const view=gallery.querySelector('.osaka-gallery-view'),track=gallery.querySelector('.osaka-gallery-track');
-  const images=[['osaka-gallery-3.png','大阪丸 / 色彩与品牌形象'],['osaka-gallery-2.png','大阪丸 / 设计背景与市场分析'],['osaka-gallery-4.png','大阪丸 / 包装与角色设计'],['osaka-gallery-6.png','大阪丸 / 品牌应用展示']];
+  const images=[['osaka-gallery-3.webp','大阪丸 / 色彩与品牌形象'],['osaka-gallery-2.webp','大阪丸 / 设计背景与市场分析'],['osaka-gallery-4.webp','大阪丸 / 包装与角色设计'],['osaka-gallery-6.webp','大阪丸 / 品牌应用展示']];
   // Repeat the same sequence to provide continuous scrolling in both directions.
   for(let cycle=0;cycle<3;cycle++)for(const [src,label] of images){
     const figure=document.createElement('figure'),img=document.createElement('img'),caption=document.createElement('figcaption');
-    img.width=src==='osaka-gallery-2.png'?3834:3840;img.height=1080;
-    img.src=src;img.alt=label;img.draggable=false;caption.textContent=label;figure.append(img,caption);track.append(figure);
+    img.width=src==='osaka-gallery-2.webp'?3834:3840;img.height=1080;
+    img.dataset.src=src;img.decoding='async';img.alt=label;img.draggable=false;caption.textContent=label;figure.append(img,caption);track.append(figure);
     if(cycle!==1)figure.setAttribute('aria-hidden','true');
   }
   let speed=45,previousTime=0;
   const period=()=>track.children[images.length].offsetLeft-track.children[0].offsetLeft;
   entry.onclick=()=>{
-    gallery.hidden=false;speed=45;previousTime=0;
+    gallery.hidden=false;gallery.querySelectorAll('img[data-src]').forEach(image=>{image.loading='eager';image.src=image.dataset.src;delete image.dataset.src;});speed=45;previousTime=0;
     parent.postMessage({type:'archive-state',open:true},'*');
     requestAnimationFrame(()=>{view.scrollLeft=period();gallery.querySelector('.close').focus()});
   };

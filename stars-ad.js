@@ -42,7 +42,7 @@
   const release=()=>{drag=null;parent.postMessage({type:'roam-focus'},'*')};bar.onpointerup=bar.onpointercancel=release;bar.onlostpointercapture=()=>drag=null;
   win.querySelector('.close').onclick=()=>{win.hidden=true;release()};
   addEventListener('message',e=>{if(e.source!==parent)return;if(e.data?.type==='stars-open')win.hidden=false;if(e.data?.type==='stars-close')win.hidden=true;});
-  const sound=new Audio('osaka-sound.mp4');sound.preload='auto';sound.volume=.7;
+  const sound=new Audio('osaka-sound.mp4');sound.preload='none';sound.volume=.7;
   addEventListener('message',e=>{if(e.source===parent&&e.data?.type==='stars-open'){sound.currentTime=0;sound.play().catch(()=>{});}});
   style.textContent += `
     .stars-cta:focus-visible{outline:3px dashed navy;outline-offset:3px}
@@ -63,19 +63,19 @@
   gallery.innerHTML='<div class="stars-gallery-title">星穹永调 / DESIGN GALLERY</div><button class="close" aria-label="关闭作品展示">×</button><div class="stars-gallery-view" tabindex="0" aria-label="横向图片展示"><div class="stars-gallery-track"></div></div><div class="stars-gallery-status">鼠标左右移动控制方向与速度 · 中央暂停 · Esc 返回</div>';
   document.body.append(gallery);
   const view=gallery.querySelector('.stars-gallery-view'),track=gallery.querySelector('.stars-gallery-track');
-  const images=[['stars-gallery-2.png','星穹永调 / 创意研究与角色设计'],['stars-gallery-6.png','星穹永调 / 游戏流程与核心机制'],['stars-gallery-1.png','星穹永调 / 项目介绍与玩法流程']];
+  const images=[['stars-gallery-2.webp','星穹永调 / 创意研究与角色设计'],['stars-gallery-6.webp','星穹永调 / 游戏流程与核心机制'],['stars-gallery-1.webp','星穹永调 / 项目介绍与玩法流程']];
   // Repeat the same sequence to provide continuous scrolling in both directions.
   for(let cycle=0;cycle<3;cycle++)for(const [src,label] of images){
     const figure=document.createElement('figure'),img=document.createElement('img'),caption=document.createElement('figcaption');
     img.width=3840;img.height=1080;
     img.addEventListener('load',()=>{img.width=img.naturalWidth;img.height=img.naturalHeight;});
-    img.src=src;img.alt=label;img.draggable=false;caption.textContent=label;figure.append(img,caption);track.append(figure);
+    img.dataset.src=src;img.decoding='async';img.alt=label;img.draggable=false;caption.textContent=label;figure.append(img,caption);track.append(figure);
     if(cycle!==1)figure.setAttribute('aria-hidden','true');
   }
   let speed=45,previousTime=0;
   const period=()=>track.children[images.length].offsetLeft-track.children[0].offsetLeft;
   entry.onclick=()=>{
-    gallery.hidden=false;speed=45;previousTime=0;
+    gallery.hidden=false;gallery.querySelectorAll('img[data-src]').forEach(image=>{image.loading='eager';image.src=image.dataset.src;delete image.dataset.src;});speed=45;previousTime=0;
     parent.postMessage({type:'archive-state',open:true},'*');
     requestAnimationFrame(()=>{view.scrollLeft=period();gallery.querySelector('.close').focus()});
   };

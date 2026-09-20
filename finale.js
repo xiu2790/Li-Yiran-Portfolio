@@ -1,7 +1,7 @@
 (() => {
   const style = document.createElement('style');
   style.textContent = `
-    #player.finale{background-image:url('character-finale.png');animation:none;transform:none;margin-top:-182px}
+    #player.finale{background-image:url('character-finale.webp');animation:none;transform:none;margin-top:-182px}
     .finale-bubble{position:fixed;width:310px;max-width:calc(100vw - 16px);aspect-ratio:640/236;z-index:9;pointer-events:none}
     .finale-bubble[hidden]{display:none}
     .finale-bubble img{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;transform:scaleX(-1)}

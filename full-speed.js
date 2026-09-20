@@ -14,7 +14,7 @@
   `;
   document.head.append(style);
   const win=document.createElement('section');win.id='fullSpeed';win.className='window';win.setAttribute('aria-label','全速前进');
-  win.innerHTML='<img src="full-speed.png" alt="全速前进 GO!GO!GO! 向右箭头" draggable="false">';
+  win.innerHTML='<img src="full-speed.webp" alt="全速前进 GO!GO!GO! 向右箭头" draggable="false">';
   win.title='拖动图片移动';
   document.body.append(win);
   const task=document.createElement('button');task.id='fullSpeedTask';task.type='button';task.textContent='全速前进';task.setAttribute('aria-controls','fullSpeed');task.setAttribute('aria-pressed','true');
