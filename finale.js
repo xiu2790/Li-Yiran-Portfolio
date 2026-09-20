@@ -15,7 +15,6 @@
   const frame = document.createElement('img');frame.src = 'finale-bubble.png';frame.alt = '';
   const text = document.createElement('span');text.textContent = '༄༘⋆ꕥ☪︎・̩͙完结撒花☪︎・̩͙ꕥ⋆༘༅';
   bubble.append(frame, text);document.body.append(bubble);
-  const preload = new Image();preload.src = 'character-finale.png';
   window.updateFinale = position => {
     const player = document.getElementById('player');
     const active = position >= 2670;
