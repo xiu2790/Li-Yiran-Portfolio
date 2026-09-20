@@ -15,17 +15,17 @@
     if(e.source===parent && e.data?.type==='eye-pointer')track(e.data.x,e.data.y);
   });
   const archive = document.getElementById('archive');
-  const sync = () => parent.postMessage({type:'archive-state',open:[...document.querySelectorAll('#archive,.app-full,.osaka-gallery,.yuequ-gallery,.stars-gallery,#songGallery,[data-archive-ad]')].some(w=>!w.hidden)},'*');
+  const sync = () => parent.postMessage({type:'archive-state',open:[...document.querySelectorAll('#archive,.app-full,.osaka-gallery,.yuequ-gallery,.stars-gallery,#songGallery')].some(w=>!w.hidden)},'*');
   let syncQueued=false;
-  new MutationObserver(records=>{const selector='#archive,.app-full,.osaka-gallery,.yuequ-gallery,.stars-gallery,#songGallery,[data-archive-ad]';if(!records.some(r=>r.target.matches?.(selector))||syncQueued)return;syncQueued=true;queueMicrotask(()=>{syncQueued=false;sync()});}).observe(document.body,{subtree:true,attributes:true,attributeFilter:['hidden','data-archive-ad']});
+  new MutationObserver(records=>{const selector='#archive,.app-full,.osaka-gallery,.yuequ-gallery,.stars-gallery,#songGallery';if(!records.some(r=>r.target.matches?.(selector))||syncQueued)return;syncQueued=true;queueMicrotask(()=>{syncQueued=false;sync()});}).observe(document.body,{subtree:true,attributes:true,attributeFilter:['hidden','data-archive-ad']});
   addEventListener('message',e=>{
-    if(e.source!==parent||!e.data?.fromArchive)return;
+    if(e.source!==parent)return;
     const ids={'osaka-open':'osakaAd','yuequ-open':'yuequAd','song-open':'songAd','stars-open':'starsAd'};
     const id=ids[e.data.type];if(!id)return;
     queueMicrotask(()=>{
       const ad=document.getElementById(id);if(!ad)return;
       document.querySelectorAll('[data-archive-ad]').forEach(other=>{if(other!==ad)other.hidden=true});
-      ad.setAttribute('data-archive-ad','true');ad.style.zIndex='10000';sync();
+      if(e.data.fromArchive){ad.setAttribute('data-archive-ad','true');ad.style.zIndex='10000';}else{ad.removeAttribute('data-archive-ad');ad.style.zIndex='290';}sync();
     });
   });
   const archiveStyle=document.createElement('style');archiveStyle.textContent='[data-archive-ad]{z-index:10000!important}.osaka-gallery,.yuequ-gallery,.stars-gallery,#songGallery{z-index:100001!important}';document.head.append(archiveStyle);
