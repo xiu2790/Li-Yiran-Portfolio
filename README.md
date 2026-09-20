@@ -11,3 +11,5 @@ In repository Settings > Pages, select Deploy from a branch, then `main` and
 `/ (root)` to publish the website.
 
 No build step is required. Keep the images, audio and scripts alongside the HTML.
+
+The project is a static site: Vercel serves the repository root directly.
