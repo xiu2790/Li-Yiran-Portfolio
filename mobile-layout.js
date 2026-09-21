@@ -56,24 +56,48 @@
     if(!style){style=doc.createElement('style');style.id='mobileDesktop';doc.head.append(style);}
     style.textContent=`
       .icons{top:12px;left:8px;gap:8px}.icons img{width:26px;height:26px}.icons button{font-size:10px;gap:2px}
-      #paint{width:min(42vw,520px)!important;max-height:88dvh;left:43%!important;top:3%!important}
-      #eye{width:min(22vw,250px)!important;left:8%!important;top:18%!important}
-      #error{width:min(22vw,260px)!important;left:23%!important;top:39%!important}
-      #mines{transform:scale(.58);transform-origin:top right;right:8px!important;top:38%!important}
-      #osakaAd,#yuequAd,#songAd,#starsAd{width:min(52vw,900px);max-width:52vw;max-height:82dvh;right:2%;top:10%;overflow:hidden}
-      #osakaAd .osaka-poster,#yuequAd .yuequ-poster,#songAd .song-poster,#starsAd .stars-poster{max-height:calc(82dvh - 42px);aspect-ratio:auto}
-      #osakaAd .osaka-poster>img,#yuequAd .yuequ-poster>img,#songAd .song-poster>img,#starsAd .stars-poster>img{object-fit:contain}
+      #paint{width:min(42vw,520px)!important;max-height:calc(100dvh - 44px);left:43%!important;top:3%!important;overflow:hidden}
+      #eye{width:min(22vw,250px)!important;max-height:calc(100dvh - 44px);left:8%!important;top:18%!important;overflow:hidden}
+      #error{width:min(22vw,260px)!important;max-height:calc(100dvh - 44px);left:23%!important;top:39%!important;overflow:hidden}
+      #mines{width:min(260px,calc(100dvh - 154px))!important;max-width:none;transform:none;right:8px;top:8px!important;overflow:visible}
+      #mines .bar{font-size:10px;padding:3px 4px}
+      #mines .mine-head{padding:4px;margin-bottom:5px}
+      #mines .digits{font-size:16px}
+      #mines #mineReset{width:30px;height:30px;font-size:19px}
+      #mines .cell{font-size:12px}
+      #mines #mineStatus{font-size:9px;margin:4px 0}
+      #osakaAd,.osaka-ad,#yuequAd,#songAd,#starsAd{width:min(54vw,560px,calc((100dvh - 100px)*1.778));max-width:none;max-height:none;left:auto;right:max(12px,env(safe-area-inset-right));top:12px;padding:32px 6px 6px;overflow:hidden}
+      .osaka-ad .osaka-poster,#yuequAd .yuequ-poster,#songAd .song-poster,#starsAd .stars-poster{max-height:none;aspect-ratio:658/370}
+      .osaka-ad .bar,#yuequAd .bar,#songAd .bar,#starsAd .bar{height:28px;padding-right:34px;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;touch-action:none}
+      .osaka-ad .close,#yuequAd .close,#songAd .close,#starsAd .close,.app-full .app-close{width:28px;height:26px;top:0;right:1px;z-index:10}
       #fullSpeed{max-width:24vw;min-width:100px;left:26%!important;top:28%!important}
+      .app-full{left:4vw!important;top:4dvh!important;width:92vw!important;height:86dvh!important;max-height:calc(100dvh - 42px);padding:30px 8px 8px;overflow:hidden}
+      .app-full .app-body{padding:8px;overflow:auto}
+      #bin-app .pixel-game{padding:4px;font-size:10px}
+      #bin-app .pixel-game h2{font-size:13px;margin:2px}
+      #bin-app .pixel-game p{margin:3px;font-size:10px}
+      #bin-app .pixel-game{display:flex;flex-direction:column;align-items:center;gap:3px}
+      #bin-app .game-screen{flex:none;width:auto;height:calc(100% - 65px);aspect-ratio:350/190;max-width:100%;object-fit:fill;margin:3px auto}
+      #bin-app .game-controls{gap:8px;flex-wrap:wrap;font-size:10px}
+      #bin-app .pixel-game button{font-size:10px;padding:3px 6px}
       #archive{left:2vw!important;top:2dvh!important;width:96vw!important;height:calc(96dvh - 34px)!important}
       .taskbar{gap:3px;height:32px;overflow-x:auto;overflow-y:hidden}.taskbar button{font-size:10px;padding:1px 5px;white-space:nowrap;flex-shrink:0}.clock{font-size:10px;padding:4px;white-space:nowrap}
       .archive-files{padding:10px;gap:8px}.archive-project{padding:8px;min-height:100px}
       .note{font-size:20px;bottom:13%}
       .osaka-gallery,.yuequ-gallery,.stars-gallery,#songGallery{inset:4px 4px 34px;max-height:none;padding:28px 5px 22px}
       .osaka-gallery-view,.yuequ-gallery-view,.stars-gallery-view,.song-view{height:100%}
-      .osaka-gallery img,.yuequ-gallery img,.stars-gallery img,.song-track img{max-height:calc(100dvh - 92px);height:auto;width:auto}
+      .osaka-gallery img,.yuequ-gallery img,.stars-gallery img,.song-track img{max-height:none;height:calc(100% - 28px);width:auto;max-width:none;flex:none}
       .osaka-gallery-track,.yuequ-gallery-track,.stars-gallery-track,.song-track{height:100%;padding:8px;gap:12px}
-      .osaka-gallery figure,.yuequ-gallery figure,.stars-gallery figure,.song-track figure{height:100%;max-width:88vw}
+      .osaka-gallery figure,.yuequ-gallery figure,.stars-gallery figure,.song-track figure{height:100%;max-width:none;flex:none}
+      .osaka-gallery .close,.yuequ-gallery .close,.stars-gallery .close,#songGallery .close{width:28px;height:26px;top:0;right:0}
+      .song-view{overflow-x:auto;touch-action:pan-x}
     `;
+    // Ad modules append their own styles asynchronously; keep the mobile
+    // overrides last in the cascade after those modules are created.
+    style.remove();doc.head.append(style);
   }
   frame.addEventListener('load',fitDesktop);addEventListener('resize',fitDesktop);fitDesktop();
+  // The ad scripts are loaded by the desktop document after its initial load.
+  // Reapply the viewport rules once those late-created windows exist.
+  setTimeout(fitDesktop,250);setTimeout(fitDesktop,1000);setTimeout(fitDesktop,2000);
 })();
