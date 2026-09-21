@@ -20,6 +20,7 @@
     @media(pointer:coarse) and (orientation:landscape){
       .top{inset:8px 12px auto;font-size:10px}
       .view{inset:28px 0 42px}
+      .player,.ghost{top:auto;bottom:12%;height:min(164px,58dvh);width:min(124px,44dvh);margin-top:0!important}
       .foot{inset:auto 12px 8px;font-size:10px}
       #touchMove{bottom:8px;left:10px;gap:5px}
       #touchMove button{width:44px;height:34px;font-size:18px}
@@ -56,7 +57,9 @@
     if(!style){style=doc.createElement('style');style.id='mobileDesktop';doc.head.append(style);}
     style.textContent=`
       .icons{top:12px;left:8px;gap:8px}.icons img{width:26px;height:26px}.icons button{font-size:10px;gap:2px}
-      #paint{width:min(42vw,520px)!important;max-height:calc(100dvh - 44px);left:43%!important;top:3%!important;overflow:hidden}
+      #paint{width:min(42vw,520px,calc((100dvh - 52px)*600/447))!important;max-height:none;left:43%!important;top:3%!important;overflow:hidden}
+      #paint .paint-workspace{top:11.2%;bottom:16.1%;left:11.67%;right:3.33%}
+      #paint .paint-sheet{flex:1 1 0;min-height:0;align-self:stretch;background:#06058a}
       #eye{width:min(22vw,250px)!important;max-height:calc(100dvh - 44px);left:8%!important;top:18%!important;overflow:hidden}
       #error{width:min(22vw,260px)!important;max-height:calc(100dvh - 44px);left:23%!important;top:39%!important;overflow:hidden}
       #mines{width:min(260px,calc(100dvh - 154px))!important;max-width:none;transform:none;right:8px;top:8px!important;overflow:visible}
@@ -91,6 +94,10 @@
       .osaka-gallery figure,.yuequ-gallery figure,.stars-gallery figure,.song-track figure{height:100%;max-width:none;flex:none}
       .osaka-gallery .close,.yuequ-gallery .close,.stars-gallery .close,#songGallery .close{width:28px;height:26px;top:0;right:0}
       .song-view{overflow-x:auto;touch-action:pan-x}
+      /* Keep animated crops aligned with the poster's image coordinate system. */
+      #songAd .song-poster,#starsAd .stars-poster{border:0;box-shadow:inset 0 0 0 2px #888}
+      #songAd .song-cta,#starsAd .stars-action{animation-name:mobilePosterPulse;transform:scale(1.09);transform-origin:center}
+      @keyframes mobilePosterPulse{0%,100%{transform:scale(1.09)}50%{transform:scale(1.15)}}
     `;
     // Ad modules append their own styles asynchronously; keep the mobile
     // overrides last in the cascade after those modules are created.
